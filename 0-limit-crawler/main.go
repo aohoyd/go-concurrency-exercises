@@ -12,7 +12,10 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
+
+var tickerChan = time.NewTicker(time.Second).C
 
 // Crawl uses `fetcher` from the `mockfetcher.go` file to imitate a
 // real crawler. It crawls until the maximum depth has reached.
@@ -23,6 +26,7 @@ func Crawl(url string, depth int, wg *sync.WaitGroup) {
 		return
 	}
 
+	<-tickerChan
 	body, urls, err := fetcher.Fetch(url)
 	if err != nil {
 		fmt.Println(err)
